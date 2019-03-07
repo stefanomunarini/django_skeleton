@@ -1,0 +1,32 @@
+{% extends "__layout_sidebar_left.html" %}
+{% load static %}
+{% load i18n %}
+{% load cloudinary %}
+
+{% load account socialaccount %}
+
+{% block col-side %}
+    {% if user.profile.third_party_login %}
+        {# TODO: create a method that returns profile pic in the model#}
+        <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" />
+    {% else %}
+        {% cloudinary request.user.profile.profile_picture format="jpg" width=250 height=250 crop="fill" %}
+    {% endif %}
+{% endblock col-side %}
+
+{% block col-main %}
+    <div>
+        <h3 class="text-left">
+            {{ user.profile.display_name }}
+        </h3>
+        <p>{{ user.profile.user.email }}</p>
+        <p>{% trans "Last login:" %} {{ user.profile.user.last_login }}</p>
+        <p>
+            <a href="{% url 'profile:user-profile-update' %}"
+               class="button success"
+               id="update-profile">
+                {% trans 'Update profile' %}
+            </a>
+        </p>
+    </div>
+{% endblock col-main %}

@@ -1,0 +1,11 @@
+{% extends "__base.html" %}
+{% load i18n %}
+
+{% block title %}403 &ndash; {{ block.super }}{% endblock title %}
+
+{% block main %}
+    <h2>403</h2>
+    <p>{% blocktrans %}Oops! Seems like you don't have permissions to access this page.{% endblocktrans %}</p>
+{% endblock main %}
+
+

@@ -1,0 +1,57 @@
+{% load i18n cloudinary users %}
+
+{% if form %}
+    {% if form.non_field_errors %}
+        <div class="row expanded">
+            <div class="small-12 columns">
+                {% for error in form.non_field_errors %}
+                    <div class="callout warning" data-closable>
+                        <p>{{ error }}</p>
+                        <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% for field in form %}
+        {% if field.field|get_class == 'CloudinaryFileField' %}
+            <div class="row expanded">
+                <div class="small-12 columns">
+                    <div class="cloudinary-image clearfix">
+                        <div class="callout float-left text-center">
+                            {% if field.initial %}
+                                <img class="preview" data-id="{{ field.html_name }}" width="128" height="128" src="{% cloudinary_url field.initial width=256 height=256 crop="fill" %}">
+                            {% else %}
+                                <img class="preview" data-id="{{ field.html_name }}" width="128" height="128">
+                            {% endif %}
+                            <label class="button expanded" for="id_{{ field.html_name }}">
+                                <i class="fa fa-file-photo-o" aria-hidden="true"></i>
+                                {% trans "Select" %} {{ field.label|lower }}
+                            </label>
+                        </div>
+                        <input id="id_{{ field.html_name }}"
+                               class="hide"
+                               name="{{ field.html_name }}"
+                               type="file">
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="row expanded {% if field.is_hidden %}hide{% endif %}">
+                <div class="small-12 columns">
+                    {% include "_input_wrapper.html" %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{% if submit_text %}
+    <div class="row">
+        <div class="small-12 columns">
+            <input type="submit" class="button" value="{{ submit_text }}">
+        </div>
+    </div>
+{% endif %}

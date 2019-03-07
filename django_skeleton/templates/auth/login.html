@@ -1,0 +1,10 @@
+{% extends "__base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Log In" %} &ndash; {{ block.super }}{% endblock title %}
+
+{% block main %}
+
+{% include "auth/_login_form.html" %}
+
+{% endblock main %}

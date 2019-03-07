@@ -1,0 +1,18 @@
+{% extends "__base.html" %}
+{% load i18n %}
+{% load socialaccount %}
+
+{% block title %}{% trans "New Player" %} &ndash; {{ block.super }}{% endblock title %}
+
+{% block main %}
+
+    <div class="row">
+        <div class="small-12 columns">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% include "_input_grid.html" with submit_text=_('Sign Up') %}
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

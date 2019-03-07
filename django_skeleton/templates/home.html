@@ -1,0 +1,10 @@
+{% extends "__base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Home" %} &ndash; {{ block.super }}{% endblock title %}
+
+{% block main %}
+{#    <div class="small-12 columns">#}
+        <h1>{% trans 'Welcome!' %}</h1>
+{#    </div>#}
+{% endblock main %}

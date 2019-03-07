@@ -1,0 +1,50 @@
+{% load i18n %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_language_info_list for LANGUAGES as langs %}
+
+{% url 'login' as login_url %}
+
+<div class="title-bar" data-responsive-toggle="main-menu" data-hide-for="medium">
+    <button class="menu-icon" type="button" data-toggle="main-menu"></button>
+    <div class="title-bar-title">{% trans "Menu" %}</div>
+</div>
+
+<ul id="main-menu" class="vertical menu" data-accordion-menu>
+    {% for link in main_menu.left %}{% if not link.hide %}
+        {% url link.view as href %}
+        <li class="{% if href == request.path %}active{% endif %}">
+            <a href="{{ href }}" >{% if link.icon %}<i class="fa fa-{{ link.icon }}"></i> {% endif %}<span>{{ link.label }}</span></a>
+        </li>
+    {% endif %}{% endfor %}
+    {% if user.is_authenticated %}
+        <li>
+            {% url 'profile:user-profile' as href %}
+            <a href="#"><i class="fa fa-id-card"></i> <span>{{ user.username }}</span></a>
+            <ul class="menu vertical{% if href == request.path %} is-active{% endif %}">
+                <li class="{% if href == request.path %}active{% endif %}"><a href="{{ href }}"><i class="fa fa-user-circle-o"></i> <span>{% trans "My Profile" %}</span></a></li>
+                <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> <span>{% trans "Log Out" %}</span></a></li>
+            </ul>
+        </li>
+    {% elif request.path != login_url %}
+        {% url 'login' as href %}
+        <li{% if href == request.path %} class="active"{% endif %}><a href="{% url 'login' %}?next={{request.path}}"><i class="fa fa-sign-in"></i> <span>{% trans "Log In" %}</span></a></li>
+        {% url 'profile:signup' as href %}
+        <li{% if href == request.path %} class="active"{% endif %}><a href="{{ href }}"><i class="fa fa-user-plus"></i> <span>{% trans "Sign Up" %}</span></a></li>
+    {% endif %}
+    {% if langs|length > 1 %}
+        <li>
+            <a href="#"><i class="fa fa-globe"></i> {{ lang.name_translated }}</a>
+            <ul class="menu vertical">
+                {% for l in langs %}
+                    {% if l.code != lang.code %}
+                    <li><button form="language-form" class="language-menu-button button expanded" type="submit" name="language" value="{{ l.code }}">{{ l.name_local }}</button></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </li>
+        <form id="language-form" action="{% url 'set_language' %}" method="post">
+            <input name="next" value="{{ request.path }}" type="hidden"/>
+            {% csrf_token %}
+        </form>
+    {% endif %}
+</ul>
